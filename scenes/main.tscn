@@ -1,3 +1,22 @@
-﻿[gd_scene format=3]
+[gd_scene format=3 uid="uid://bs6w2l2jj2bs7"]
 
-[node name="main" type="Node"]
+[ext_resource type="Script" uid="uid://bf86idr5ymhro" path="res://scripts/dungeon/dungeon_manager.gd" id="1_jyhfs"]
+[ext_resource type="Script" uid="uid://bl7n4cxrk4knn" path="res://scripts/core/main.gd" id="1_tbgi4"]
+[ext_resource type="Script" uid="uid://y6rct2e76xn8" path="res://scripts/combat/combat_manager.gd" id="2_tbgi4"]
+[ext_resource type="Script" uid="uid://bfum08rmrsiw3" path="res://scripts/party/party_manager.gd" id="3_tefeu"]
+[ext_resource type="Script" uid="uid://c0lyibj2fqru" path="res://scripts/dungeon/interaction_manager.gd" id="4_o6xl0"]
+
+[node name="main" type="Node" unique_id=992352361]
+script = ExtResource("1_tbgi4")
+
+[node name="DungeonManager" type="Node" parent="." unique_id=1872130479]
+script = ExtResource("1_jyhfs")
+
+[node name="CombatManager" type="Node" parent="." unique_id=1813563175]
+script = ExtResource("2_tbgi4")
+
+[node name="PartyManager" type="Node" parent="." unique_id=63504273]
+script = ExtResource("3_tefeu")
+
+[node name="InteractionManager" type="Node" parent="." unique_id=939591920]
+script = ExtResource("4_o6xl0")
