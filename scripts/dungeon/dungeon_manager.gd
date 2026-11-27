@@ -57,8 +57,24 @@ func get_tile(cell: Vector2i) -> String:
 	return DUNGEON_MAP[cell.y].substr(cell.x, 1)
 
 
+
 func is_walkable(cell: Vector2i) -> bool:
-	return get_tile(cell) == "."
+	# First check the static dungeon layout.
+	if get_tile(cell) != ".":
+		return false
+
+	# Next check interactive objects.
+	
+	var interaction_manager := (
+		get_node("../InteractionManager")
+		as HollowInteractionManager
+	)
+
+	if interaction_manager.is_cell_blocked(cell):
+		return false
+
+	return true
+
 
 
 func grid_to_world(cell: Vector2i) -> Vector3:

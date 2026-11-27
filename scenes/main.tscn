@@ -36,3 +36,27 @@ script = ExtResource("7_o6xl0")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
 current = true
 far = 100.0
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=109762346]
+
+[node name="MarginContainer" type="MarginContainer" parent="HUD" unique_id=352638969]
+anchors_preset = 10
+anchor_right = 1.0
+grow_horizontal = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HUD/MarginContainer" unique_id=1537081746]
+layout_mode = 2
+
+[node name="ObjectiveLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=569492059]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "Objective: Find a way to restore the beacon."
+
+[node name="FeedbackLabel" type="Label" parent="HUD/MarginContainer/VBoxContainer" unique_id=623575467]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "WASD: Move | Q/E: Turn | F: Interact"

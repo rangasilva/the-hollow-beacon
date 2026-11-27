@@ -15,6 +15,10 @@ const DIRECTIONS: Array[Vector2i] = [
 	$"../DungeonManager"
 )
 
+@onready var interaction_manager: HollowInteractionManager = (
+	$"../InteractionManager"
+)
+
 var grid_position: Vector2i
 var facing: int = 0
 var is_moving: bool = false
@@ -35,23 +39,15 @@ func _ready() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# Do not accept repeat events from held keys.
-	if event is InputEventKey and event.echo:
+	if event is InputEventKey and event.is_echo():
 		return
 
-	# Allow C to toggle combat state
-	if event.is_action_pressed("begin_combat"):
-		if GameState.current_mode == GameState.GameMode.EXPLORATION:
-			GameState.start_combat()
-		elif GameState.current_mode == GameState.GameMode.COMBAT:
-			GameState.end_combat()
-		return
-
-	# Only allow exploration controls during exploration.
 	if GameState.current_mode != GameState.GameMode.EXPLORATION:
 		return
 
-	# Prevent overlapping movement animations.
+	if interaction_manager.is_level_complete:
+		return
+
 	if is_moving:
 		return
 
@@ -65,12 +61,14 @@ func _unhandled_input(event: InputEvent) -> void:
 
 	elif event.is_action_pressed("strafe_left"):
 		var left_direction := (facing + 3) % 4
+
 		move_in_direction(
 			DIRECTIONS[left_direction]
 		)
 
 	elif event.is_action_pressed("strafe_right"):
 		var right_direction := (facing + 1) % 4
+
 		move_in_direction(
 			DIRECTIONS[right_direction]
 		)
@@ -81,11 +79,21 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("turn_right"):
 		turn_player(1)
 
+	elif event.is_action_pressed("interact"):
+		interact_with_front_cell()
+
+
+func interact_with_front_cell() -> void:
+	var target_cell := (
+		grid_position + DIRECTIONS[facing]
+	)
+
+	interaction_manager.try_interact(target_cell)
+
 
 func move_in_direction(direction: Vector2i) -> void:
 	var destination := grid_position + direction
 
-	# Prevent entering walls or going outside the map.
 	if not dungeon_manager.is_walkable(destination):
 		print("Movement blocked at: ", destination)
 		return
@@ -99,8 +107,8 @@ func move_in_direction(direction: Vector2i) -> void:
 		facing
 	)
 
-	var target_position := dungeon_manager.grid_to_world(
-		destination
+	var target_position := (
+		dungeon_manager.grid_to_world(destination)
 	)
 
 	var tween := create_tween()
@@ -110,13 +118,20 @@ func move_in_direction(direction: Vector2i) -> void:
 		"position",
 		target_position,
 		move_duration
-	).set_trans(Tween.TRANS_SINE).set_ease(
+	).set_trans(
+		Tween.TRANS_SINE
+	).set_ease(
 		Tween.EASE_IN_OUT
 	)
 
 	await tween.finished
 
 	is_moving = false
+
+	# Trigger any event associated with this tile.
+	interaction_manager.on_player_entered_cell(
+		grid_position
+	)
 
 
 func turn_player(direction: int) -> void:
@@ -143,7 +158,9 @@ func turn_player(direction: int) -> void:
 		"rotation:y",
 		target_rotation,
 		turn_duration
-	).set_trans(Tween.TRANS_SINE).set_ease(
+	).set_trans(
+		Tween.TRANS_SINE
+	).set_ease(
 		Tween.EASE_IN_OUT
 	)
 
