@@ -5,6 +5,8 @@
 [ext_resource type="Script" uid="uid://y6rct2e76xn8" path="res://scripts/combat/combat_manager.gd" id="2_tbgi4"]
 [ext_resource type="Script" uid="uid://bfum08rmrsiw3" path="res://scripts/party/party_manager.gd" id="3_tefeu"]
 [ext_resource type="Script" uid="uid://c0lyibj2fqru" path="res://scripts/dungeon/interaction_manager.gd" id="4_o6xl0"]
+[ext_resource type="Script" uid="uid://og20hqice8bp" path="res://scripts/dungeon/dungeon_view.gd" id="6_tefeu"]
+[ext_resource type="Script" uid="uid://te82lpkvjpbn" path="res://scripts/dungeon/grid_player.gd" id="7_o6xl0"]
 
 [node name="main" type="Node" unique_id=992352361]
 script = ExtResource("1_tbgi4")
@@ -20,3 +22,17 @@ script = ExtResource("3_tefeu")
 
 [node name="InteractionManager" type="Node" parent="." unique_id=939591920]
 script = ExtResource("4_o6xl0")
+
+[node name="DungeonView" type="Node3D" parent="." unique_id=1922626050]
+script = ExtResource("6_tefeu")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="DungeonView" unique_id=387205895]
+transform = Transform3D(0.90630776, 0.34618863, -0.24240388, 0, 0.57357645, 0.81915206, 0.42261827, -0.74240386, 0.5198368, 0, 0, 0)
+
+[node name="GridPlayer" type="Node3D" parent="." unique_id=235229099]
+script = ExtResource("7_o6xl0")
+
+[node name="Camera3D" type="Camera3D" parent="GridPlayer" unique_id=1023053021]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+current = true
+far = 100.0
